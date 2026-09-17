@@ -1,0 +1,14 @@
+{
+  "id": "TargetedRerolls",
+  "name": "Targeted Rerolls",
+  "display_name": "Targeted Rerolls",
+  "author": ["@_Odinh"],
+  "website": "https://odinn.nl",
+  "description": "Choose Tarot, Planet, Spectral, Playing Card, or Joker targets and perform real vanilla rerolls until any selected target appears, subject to a configurable dollar reserve.",
+  "prefix": "targeted_rerolls",
+  "main_file": "TargetedRerolls.lua",
+  "icon_path": "icon.png",
+  "priority": 0,
+  "version": "0.5.0",
+  "dependencies": ["Lovely (>=0.9)"]
+}
