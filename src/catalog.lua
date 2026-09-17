@@ -164,6 +164,16 @@ return function(mod)
             isolate_collection_page_callback(child)
         end
     end
+    local function remove_collection_back(collection)
+        local outer = collection.nodes and collection.nodes[1]
+        local panel = outer and outer.nodes and outer.nodes[1]
+        local panel_nodes = panel and panel.nodes
+        local back_button = panel_nodes and panel_nodes[2]
+        if back_button and back_button.config and back_button.config.id == 'overlay_menu_back_button' then
+            table.remove(panel_nodes, 2)
+        end
+    end
+
 
 
     local function add_catalog_controls(contents)
@@ -289,6 +299,7 @@ return function(mod)
         end
         G.FUNCS.SMODS_card_collection_page = previous_collection_page
         isolate_collection_page_callback(collection)
+        remove_collection_back(collection)
 
         G.OVERLAY_MENU = previous_overlay_menu
         G.ACTIVE_MOD_UI = previous_active_mod_ui
