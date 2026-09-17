@@ -173,6 +173,18 @@ return function(mod)
             table.remove(panel_nodes, 2)
         end
     end
+    local function add_cycle_shadows(node)
+        if type(node) ~= 'table' then return end
+
+        local config = node.config
+        if config and (config.ref_value == 'l' or config.ref_value == 'r') then
+            config.shadow = true
+        end
+        for _, child in ipairs(node.nodes or {}) do
+            add_cycle_shadows(child)
+        end
+    end
+
 
 
 
@@ -182,16 +194,18 @@ return function(mod)
             if card_type == catalog.card_type then current_type_index = index end
         end
 
+        local type_cycle = create_option_cycle({
+            options = mod.card_type_labels,
+            current_option = current_type_index,
+            w = 4.5,
+            cycle_shoulders = true,
+            opt_callback = 'targeted_rerolls_set_card_type',
+            colour = G.C.RED,
+            no_pips = true,
+        })
+        add_cycle_shadows(type_cycle)
         table.insert(contents, 1, {n = G.UIT.R, config = {align = 'cm', padding = 0.05}, nodes = {
-            create_option_cycle({
-                options = mod.card_type_labels,
-                current_option = current_type_index,
-                w = 4.5,
-                cycle_shoulders = true,
-                opt_callback = 'targeted_rerolls_set_card_type',
-                colour = G.C.RED,
-                no_pips = true,
-            }),
+            type_cycle,
         }})
 
         table.insert(contents, #contents + 1, {n = G.UIT.R, config = {align = 'cm', padding = 0.05}, nodes = {
@@ -300,6 +314,7 @@ return function(mod)
         G.FUNCS.SMODS_card_collection_page = previous_collection_page
         isolate_collection_page_callback(collection)
         remove_collection_back(collection)
+        add_cycle_shadows(collection)
 
         G.OVERLAY_MENU = previous_overlay_menu
         G.ACTIVE_MOD_UI = previous_active_mod_ui
