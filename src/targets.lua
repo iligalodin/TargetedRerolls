@@ -42,11 +42,24 @@ return function(mod)
         if center.no_pool_flag and pool_flags[center.no_pool_flag] then return false end
         if center.yes_pool_flag and not pool_flags[center.yes_pool_flag] then return false end
 
-        if SMODS and SMODS.add_to_pool and not SMODS.add_to_pool(center, {source = 'targeted-reroll'}) then
+        local in_pool, pool_opts = SMODS.add_to_pool(center, {
+            source = 'targeted-reroll'
+        })
+
+        pool_opts = pool_opts or {}
+
+        if not in_pool then
             return false
         end
-        if G.GAME.banned_keys and G.GAME.banned_keys[key] then return false end
-        if G.GAME.used_jokers and G.GAME.used_jokers[key] and not showman_allows_duplicate(key) then
+
+        if G.GAME.banned_keys and G.GAME.banned_keys[key] then
+            return false
+        end
+
+        if G.GAME.used_jokers
+            and G.GAME.used_jokers[key]
+            and not pool_opts.allow_duplicates
+            and not showman_allows_duplicate(key) then
             return false
         end
         return true

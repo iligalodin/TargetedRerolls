@@ -8,6 +8,7 @@ local function load_module(path)
 end
 
 load_module('src/state.lua')
+load_module('src/mods/AKYRS.lua')
 load_module('src/utils.lua')
 load_module('src/targets.lua')
 load_module('src/search.lua')

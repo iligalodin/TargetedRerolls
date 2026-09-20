@@ -1,28 +1,3 @@
-local function aikoyori_active()
-    return SMODS
-    and SMODS.Mods
-        and SMODS.Mods.aikoyorisshenanigans
-        and SMODS.Mods.aikoyorisshenanigans.can_load == true
-end
-
-local function aiko_type_active(card_type)
-    return aikoyori_active()
-        and G
-        and G.P_CENTER_POOLS
-        and G.P_CENTER_POOLS[card_type]
-        and next(G.P_CENTER_POOLS[card_type]) ~= nil
-end
-
-local function add_aiko_card_types_to_reroll(mod)
-    for _, card_type in ipairs({'Umbral', 'Alphabet', 'Replicant'}) do
-        if aiko_type_active(card_type) then
-            table.insert(mod.card_types, card_type)
-            table.insert(mod.card_type_labels, string.upper(card_type))
-        end
-    end
-end
-
-
 return function(mod)
     local current_mod = SMODS and SMODS.current_mod
     local stored_targets = current_mod and current_mod.config and current_mod.config.targets
@@ -79,9 +54,5 @@ return function(mod)
         'SPECTRAL',
         'PLAYING CARDS'
     }
-
-    add_aiko_card_types_to_reroll(mod)
-
-
 end
 
