@@ -9,11 +9,13 @@ return function(mod)
     end
 
     function targets.center_is_visible(center)
+        local is_legendary = center
+            and (center.rarity == 4 or center.rarity == 'Legendary')
         return center
             and not center.hidden
             and not center.no_collection
             and not center.omit
-            and center.unlocked ~= false
+            and (center.unlocked ~= false or is_legendary)
     end
 
     local function target_rate(target_type)
@@ -142,8 +144,7 @@ return function(mod)
 
         for _, center in ipairs(G.P_CENTER_POOLS[card_type] or {}) do
             local key = center.key
-            if key and targets.center_is_visible(center)
-                and (card_type ~= 'Joker' or joker_is_valid(key)) then
+            if key and targets.center_is_visible(center) then
                 catalog.entry_meta[center] = {
                     type = card_type,
                     key = key,
