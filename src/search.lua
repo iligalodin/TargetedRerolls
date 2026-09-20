@@ -6,7 +6,7 @@ return function(mod)
 
     local function finish_search()
         search.active = false
-        search.button_label = 'Targeted Reroll'
+        search.button_label = localize('tagr_shop_reroll')
         search.targets = {}
         search.reserve = 0
         search.rolls = 0
@@ -62,7 +62,7 @@ return function(mod)
 
         G.FUNCS.close_targeted_reroll_catalog()
         search.active = true
-        search.button_label = 'STOP'
+        search.button_label = localize('tagr_shop_stop')
         search.targets = target_list
         search.reserve = reserve
         search.rolls = 0

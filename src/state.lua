@@ -34,7 +34,7 @@ return function(mod)
             card_type = 'Joker',
             entry_meta = {},
             button_states = {},
-            start_state = {text = 'REROLL (0)'},
+            start_state = {text = 'Reroll (0)'},
         },
         debug = {
             money_text = '0',

@@ -51,12 +51,12 @@ return function(mod)
                         }),
                     }},
                     {n = G.UIT.R, config = {align = 'cm', padding = 0.05}, nodes = {
-                        {n = G.UIT.T, config = {text = 'Enter a whole-dollar amount.', scale = 0.3, colour = G.C.UI.TEXT_LIGHT}},
+                        {n = G.UIT.T, config = {text = {localize('tagr_debug_desc')}, scale = 0.3, colour = G.C.UI.TEXT_LIGHT}},
                     }},
                     UIBox_button({
                         button = 'targeted_rerolls_debug_money',
                         func = 'can_targeted_rerolls_debug_money',
-                        label = {'SET MONEY'},
+                        label = {localize('tagr_set_money')},
                         colour = G.C.PURPLE,
                         minw = 3,
                         minh = 0.8,
@@ -64,7 +64,7 @@ return function(mod)
                     }),
                     UIBox_button({
                         button = 'exit_overlay_menu',
-                        label = {'BACK'},
+                        label = {localize('tagr_back')},
                         colour = G.C.GREY,
                         minw = 3,
                         minh = 0.8,

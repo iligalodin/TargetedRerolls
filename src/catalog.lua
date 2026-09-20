@@ -25,6 +25,15 @@ return function(mod)
         return #state.selected_target_order
     end
 
+    local function reroll_label()
+        local count = selected_count()
+        local template = localize('tagr_roll_count', 'v_dictionary')
+        if type(template) ~= 'string' or template == 'ERROR' then
+            return 'REROLL ('..tostring(count)..')'
+        end
+        return template:gsub('#1#', tostring(count))
+    end
+
     local function toggle_target(state_entry)
         local id = utils.target_id(state_entry.type, state_entry.key)
         if state.selected_targets[id] then
@@ -43,7 +52,7 @@ return function(mod)
         end
 
         state_entry.text = state_entry.selected and 'SELECTED' or 'SELECT'
-        catalog.start_state.text = 'REROLL ('..tostring(selected_count())..')'
+        catalog.start_state.text = reroll_label()
         save_selected_targets()
     end
 
@@ -73,7 +82,7 @@ return function(mod)
     G.FUNCS.clear_targeted_reroll_targets = function()
         state.selected_targets = {}
         state.selected_target_order = {}
-        catalog.start_state.text = 'REROLL (0)'
+        catalog.start_state.text = reroll_label()
         save_selected_targets()
         G.FUNCS.close_targeted_reroll_catalog()
         G.FUNCS.open_targeted_reroll_catalog()
@@ -121,12 +130,13 @@ return function(mod)
             if child.config and child.config.button == 'reroll_shop' then
                 child.config.minh = 0.8
                 child.config.maxh = 0.8
+                search.button_label = localize('tagr_shop_reroll')
                 table.insert(node.nodes, index + 1, shop_button(
                     'targeted_reroll_button',
                     'open_targeted_reroll_catalog',
                     'can_open_targeted_reroll_catalog',
                     G.C.PURPLE,
-                    {'Targeted Reroll'},
+                    {localize('tagr_shop_reroll')},
                     0.8,
                     search,
                     'button_label'
@@ -211,14 +221,14 @@ return function(mod)
         table.insert(contents, #contents + 1, {n = G.UIT.R, config = {align = 'cm', padding = 0.05}, nodes = {
             UIBox_button({
                 button = 'close_targeted_reroll_catalog',
-                label = {'BACK'},
+                label = {localize('tagr_back')},
                 colour = G.C.ORANGE,
                 minw = 1.7,
                 scale = 0.32,
                 col = true,
             }),
             {n = G.UIT.C, config = {align = 'cm', padding = 0.03}, nodes = {
-                {n = G.UIT.T, config = {text = 'KEEP', scale = 0.32, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                {n = G.UIT.T, config = {text = localize('tagr_keep'), scale = 0.32, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
                 mod.numeric_text_input({
                     id = 'targeted_rerolls_reserve_input',
                     w = 1.8,
@@ -242,7 +252,7 @@ return function(mod)
             }),
             UIBox_button({
                 button = 'clear_targeted_reroll_targets',
-                label = {'CLEAR'},
+                label = {localize('tagr_clear')},
                 colour = G.C.GREY,
                 minw = 1.7,
                 minh = 0.8,
@@ -338,7 +348,7 @@ return function(mod)
             catalog.initialized = true
         end
 
-        catalog.start_state.text = 'REROLL ('..tostring(selected_count())..')'
+        catalog.start_state.text = reroll_label()
         catalog.button_states = {}
         G.SETTINGS.paused = true
 
