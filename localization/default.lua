@@ -12,7 +12,7 @@ return {
 
     misc = {
         dictionary = {
-            tagr_shop_reroll = "Targeted Reroll",
+            tagr_shop_reroll = "Find",
             tagr_shop_stop = "Stop",
             tagr_select = "Select",
             tagr_selected = "Selected",

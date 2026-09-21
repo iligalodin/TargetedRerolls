@@ -7,13 +7,18 @@ local function load_module(path)
     assert(SMODS.load_file(path))()(mod)
 end
 
-load_module('src/state.lua')
-load_module('src/mods/MODS_INIT.lua')
-load_module('src/utils.lua')
-load_module('src/targets.lua')
-load_module('src/search.lua')
-load_module('src/input.lua')
-load_module('src/catalog.lua')
-load_module('src/debug.lua')
-load_module('src/hooks.lua')
+-- load_module('src/state.lua')
+-- load_module('src/mods/MODS_INIT.lua')
+-- load_module('src/utils.lua')
+-- load_module('src/targets.lua')
+
+-- load_module('src/search.lua')
+-- load_module('src/input.lua')
+-- load_module('src/catalog.lua')
+-- load_module('src/debug.lua')
+load_module('src/ui.lua')
+
+-- load_module('src/hooks.lua')
+
+
 

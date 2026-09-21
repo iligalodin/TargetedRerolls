@@ -12,7 +12,7 @@ return {
 
     misc = {
         dictionary = {
-            tagr_shop_reroll = "Gericht Rollen",
+            tagr_shop_reroll = "Zoek",
             tagr_shop_stop = "Stop",
             tagr_select = "Selecteer",
             tagr_selected = "Geselecteerd",
