@@ -1,55 +1,38 @@
 # Targeted Rerolls
 
-Targeted Rerolls adds a second reroll button to the shop.
+Targeted Rerolls lets you choose cards to look for in the shop. It keeps using Balatro's normal reroll action until one of those cards appears, you press **STOP**, or the next paid reroll would break your money reserve.
 
-## Usage
+## Install
 
-1. Open the shop.
-2. Click **TARGETED REROLL**.
-3. Choose a card type: Joker, Tarot, Planet, Spectral, or Playing Card.
-4. Set the minimum amount of money to keep.
-5. Select one or more targets.
-6. Click **REROLL (x)**. Rerolling stops as soon as any selected target appears.
+Install [Steamodded](https://github.com/Steamodded/smods) and Lovely, then place this folder in Balatro's `Mods` directory.
 
-The number in the button is the number of selected targets.
+## Use
 
-Selected targets are remembered in the mod configuration. Reopen the catalog
-later to continue searching with the same selection, or use **CLEAR TARGETS**
-to start a new selection.
+1. Enter a shop and click **TARGETED REROLL** beside the normal reroll button.
+2. Search by name or key, or choose a category in the left sidebar.
+3. Click cards to select them. A blue outline marks a selected card. Grey cards cannot be selected.
+4. Set **KEEP MONEY** to the minimum dollar amount you want to retain.
+5. Click **ROLL**.
 
-The default reserve is 5% of the current money when the catalog first opens.
-You can replace it with any specific whole-dollar amount, including `$0`.
+The target picker closes and the mod performs normal shop rerolls. It stops when any selected card appears. During the search, the shop button becomes **STOP**. STOP remains usable while a reroll animation is running.
 
-The reserve is locked when a search starts. The mod never performs a paid
-reroll if that reroll would reduce the balance below the configured reserve.
+Selections are saved in the mod configuration. Use **CLEAR** in the target picker to remove them.
 
 ## Rules
 
-- Every reroll uses Balatro's normal `reroll_shop()` logic.
-- Reroll costs, free rerolls, vouchers, tags, and card effects remain
-  vanilla/mod compatible.
-- Joker duplicates require Showman, matching vanilla pool rules.
-- Tarot, Planet, and Spectral targets use their current shop rate and
-  `get_current_pool()` restrictions, including unlocks, bans, pool flags, and
-  Planet softlocks.
-- Playing Card targets use the current `playing_card_rate`. Both Base and
-  Enhanced shop cards can match the selected playing-card front, while the
-  voucher-controlled Base/Enhanced choice remains vanilla.
-- The target is not spawned directly; real shop rerolls are performed.
-- If any selected target is already in the shop, no reroll is performed.
-- The targeted reroll button is disabled when the current reroll cost cannot
-  be paid.
-- Legendary and otherwise non-shop-generatable targets are excluded by the
-  normal pool rules.
-- While a targeted search is active, the shop button changes to a visible
-  **STOP** button and cancels further rerolls, including during animation
-  locks.
+- The mod does not spawn cards or rewrite vanilla card pools.
+- Every roll calls Balatro's normal `reroll_shop()` function. Normal reroll costs, free rerolls, vouchers, tags, and other mod effects still apply.
+- A paid reroll is never started if it would reduce your money below **KEEP MONEY**.
+- If a selected target is already in the shop, the picker closes without rolling.
+- The target list only shows cards that are visible and selectable in the catalog. Actual shop availability still follows Balatro and other installed mods.
+- The default reserve is 5% of your current money the first time the picker opens. You can set it to any whole-dollar value, including `0`.
 
-## Debug Menu
+## Debug menu
 
-Open the Steamodded mod settings for **Targeted Rerolls** and select
-**OPEN DEBUG MENU**.
+Open Targeted Rerolls in Steamodded's mod settings and choose **OPEN DEBUG MENU** while a run is active.
 
-Enter any nonnegative whole-dollar amount and select **SET MONEY**. The amount
-replaces the current money total. The debug menu is only enabled while a run is
-loaded and is not shown in the shop.
+The menu can set money to `$9,000,000` and reset the current reroll cost to `$1`. It is intended for testing, not normal play.
+
+## For mod authors
+
+Targeted Rerolls exposes a blacklist API for hiding cards from its target picker. See [blacklist.md](blacklist.md).
