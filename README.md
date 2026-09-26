@@ -24,7 +24,7 @@ Selections are saved in the mod configuration. Use **CLEAR** in the target picke
 - Every roll calls Balatro's normal `reroll_shop()` function. Normal reroll costs, free rerolls, vouchers, tags, and other mod effects still apply.
 - A paid reroll is never started if it would reduce your money below **KEEP MONEY**.
 - If a selected target is already in the shop, the picker closes without rolling.
-- The target list only shows cards that are visible and selectable in the catalog. Actual shop availability still follows Balatro and other installed mods.
+- The target list only enables cards that are visible, selectable, and currently eligible for the `G.shop_jokers` generation path. It uses Steamodded's normal shop pools plus Cryptid's scheduled-shop and Equilibrium sources when they are active. Ineligible cards remain visible but greyed out.
 - The default reserve is 5% of your current money the first time the picker opens. You can set it to any whole-dollar value, including `0`.
 
 ## Debug menu

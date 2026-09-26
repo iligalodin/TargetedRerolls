@@ -2,6 +2,8 @@ return function(mod)
     local shop_targets = {}
 
     local entry_id = mod.entry_id
+    local shop_availability
+
 
 
     -- Resolve indexed centers lazily because mods can register content later.
@@ -18,12 +20,40 @@ return function(mod)
             and center.unlocked ~= false
     end
 
+    -- Preview selectability mirrors the pools used to create G.shop_jokers.
+    -- A failed snapshot is deliberately permissive: an external shop override
+    -- must not make a potentially valid target appear unavailable.
+    function shop_targets.refresh_availability()
+        if type(mod.snapshot_joker_drawer) ~= 'function' then
+            shop_availability = nil
+            return false
+        end
 
-    -- Use the same matching rules for every real shop card during a search.
+        local snapshot = mod.snapshot_joker_drawer()
+        shop_availability = snapshot
+        return snapshot ~= nil
+    end
+
+    local function can_appear_in_shop(entry)
+        if not shop_availability then return true end
+        if entry.kind == 'playing_card' then
+            return shop_availability.card_fronts[entry.key] ~= nil
+        end
+
+        local center = center_for_entry(entry)
+        return shop_availability.centers[entry.key] ~= nil
+            or (center and shop_availability.centers[center.key] ~= nil)
+            or (center and center.original_key
+                and shop_availability.centers[center.original_key] ~= nil)
+    end
+
     function shop_targets.is_selectable(entry)
         if not entry or not entry.searchable then return false end
-        if entry.kind == 'playing_card' then return true end
+        if entry.kind == 'playing_card' then
+            return can_appear_in_shop(entry)
+        end
         return center_is_visible(center_for_entry(entry))
+            and can_appear_in_shop(entry)
     end
 
     -- Selection is read-only; vanilla rerolls decide what appears.

@@ -62,6 +62,7 @@ return function(mod)
             G.FUNCS.targeted_rerolls_stop()
             return
         end
+        mod.shop_targets.refresh_availability()
         G.FUNCS.open_reroll_modal()
     end
 
