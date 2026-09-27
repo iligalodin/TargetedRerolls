@@ -1,0 +1,17 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "self.SPEEDFACTOR = self.SPEEDFACTOR + math.max(0, math.abs(G.ACC) - 2)"
+position = "after"
+match_indent = true
+payload = '''
+local targeted_reroll = _G.TargetedRerolls and _G.TargetedRerolls.targeted_reroll
+if targeted_reroll and targeted_reroll.speed_multiplier then
+    self.SPEEDFACTOR = self.SPEEDFACTOR * targeted_reroll.speed_multiplier()
+end
+'''

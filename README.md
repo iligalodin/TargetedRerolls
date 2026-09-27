@@ -4,7 +4,7 @@ Targeted Rerolls lets you choose cards to look for in the shop. It keeps using B
 
 ## Install
 
-Install [Steamodded](https://github.com/Steamodded/smods) and Lovely, then place this folder in Balatro's `Mods` directory.
+Install [Steamodded](https://github.com/Steamodded/smods) and Lovely, then place this folder in Balatro's `Mods` directory. Include `lovely.toml` and restart Balatro after installing or updating the mod so Lovely can apply the reroll-speed patch.
 
 ## Use
 
@@ -16,12 +16,15 @@ Install [Steamodded](https://github.com/Steamodded/smods) and Lovely, then place
 
 The target picker closes and the mod performs normal shop rerolls. It stops when any selected card appears. During the search, the shop button becomes **STOP**. STOP remains usable while a reroll animation is running.
 
+During each automatic search, flames begin small at the 10th reroll and grow to full strength at 30 rerolls. They rise behind the whole shop reroll and FIND/STOP buttons, using each button's current colour (green for reroll, red for STOP); text and icons remain unobscured. The picker ROLL button has no flames. Ending a search extinguishes the flames and resets the counter.
+
 Selections are saved in the mod configuration. Use **CLEAR** in the target picker to remove them.
 
 ## Rules
 
 - The mod does not spawn cards or rewrite vanilla card pools.
 - Every roll calls Balatro's normal `reroll_shop()` function. Normal reroll costs, free rerolls, vouchers, tags, and other mod effects still apply.
+- Automatic searches ramp from your configured game speed to 10 times that speed over 15 unpaused seconds. Pausing freezes the ramp; STOP, finding a target, reaching the reserve, or leaving the shop resets it. Your saved game-speed setting is never changed. This uses Balatro's normal speed factor, like [Saturn's extended game-speed options](https://github.com/OceanRamen/Saturn), without requiring Saturn or skipping reroll effects.
 - A paid reroll is never started if it would reduce your money below **KEEP MONEY**.
 - If a selected target is already in the shop, the picker closes without rolling.
 - The target list only enables cards that are visible, selectable, and currently eligible for the `G.shop_jokers` generation path. It uses Steamodded's normal shop pools plus Cryptid's scheduled-shop and Equilibrium sources when they are active. Ineligible cards remain visible but greyed out.

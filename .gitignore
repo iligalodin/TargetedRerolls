@@ -1,3 +1,6 @@
 # Locally generated Thunderstore package output
 thunderstore/
 *.zip
+_pychache_
+_pychache_/*
+*.cpython*

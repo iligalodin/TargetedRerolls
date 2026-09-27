@@ -78,6 +78,92 @@ return function(mod)
         mod.targeted_reroll.start()
     end
 
+    -- Flames are siblings behind whole buttons, never children of their labels.
+    local function flame_node()
+        local object = Moveable(0, 0, 0, 0)
+        object.states.collide.can = false
+        object.states.hover.can = false
+        object.states.click.can = false
+        object.states.drag.can = false
+        return {
+            n = G.UIT.O,
+            config = {
+                object = object,
+                w = 0,
+                h = 0,
+                no_role = true,
+                can_collide = false,
+                func = 'targeted_rerolls_update_flame',
+                targeted_rerolls_flame = {
+                    amount = 0,
+                    timer = 0,
+                    colour_1 = {0, 0, 0, 1},
+                    colour_2 = {0, 0, 0, 1},
+                },
+            },
+        }
+    end
+
+    G.FUNCS.targeted_rerolls_update_flame = function(e)
+        local flame = e.config.targeted_rerolls_flame
+        local button = e.parent.children[2]
+        if not button or not button.T then return end
+
+        local sprite = e.config.object
+        if not flame.initialized then
+            sprite:remove()
+            -- The native shader fades outside 80% of its quad's width.
+            sprite = Sprite(0, 0, button.T.w * 1.25, button.T.h * 2.2,
+                G.ASSET_ATLAS['ui_1'], {x = 2, y = 0})
+            sprite.states.collide.can = false
+            sprite.states.hover.can = false
+            sprite.states.click.can = false
+            sprite.states.drag.can = false
+            sprite.parent = e
+            sprite:set_alignment({
+                major = button,
+                type = 'bmi',
+                offset = {x = 0, y = 0},
+                xy_bond = 'Weak',
+                wh_bond = 'Weak',
+            })
+            sprite:define_draw_steps({{
+                shader = 'flame',
+                send = {
+                    {name = 'time', ref_table = flame, ref_value = 'timer'},
+                    {name = 'amount', ref_table = flame, ref_value = 'amount'},
+                    {name = 'image_details', ref_table = sprite, ref_value = 'image_dims'},
+                    {name = 'texture_details', ref_table = sprite.RETS, ref_value = 'get_pos_pixel'},
+                    {name = 'colour_1', ref_table = flame, ref_value = 'colour_1'},
+                    {name = 'colour_2', ref_table = flame, ref_value = 'colour_2'},
+                    {name = 'id', val = sprite.ID},
+                },
+            }})
+            sprite:get_pos_pixel()
+            e.config.object = sprite
+            flame.initialized = true
+        end
+
+        local heat = mod.targeted_reroll.get_heat()
+        local target = heat > 0 and (0.8 + 9.2 * heat) or 0
+        local colour = button.config.colour
+        for i = 1, 3 do
+            flame.colour_1[i] = colour[i]
+            flame.colour_2[i] = math.min(1, colour[i] * 1.25 + 0.1)
+        end
+
+        -- Exponential easing cannot overshoot, including after a long frame.
+        -- Progress is counted per search; animation still uses unscaled time.
+        local dt = math.max(0, G.real_dt or 0)
+        flame.amount = heat > 0
+            and flame.amount + (target - flame.amount) * (1 - math.exp(-6 * dt))
+            or 0
+        flame.timer = flame.timer + dt * (0.8 + 2.2 * heat)
+        sprite.states.visible = flame.amount >= 0.1
+        sprite.T.w = button.T.w * 1.25
+        sprite.T.h = button.T.h * 2.2
+    end
+
 
 
     local get_die_sprite
@@ -701,16 +787,18 @@ return function(mod)
                         align = 'cm',
                         padding = 0,
                     },
-                    nodes = {{
-                        n = G.UIT.T,
-                        config = {
-                            ref_table = mod.shop_button_state,
-                            ref_value = 'label',
-                            scale = 0.4,
-                            colour = G.C.WHITE,
-                            shadow = true,
+                    nodes = {
+                        {
+                            n = G.UIT.T,
+                            config = {
+                                ref_table = mod.shop_button_state,
+                                ref_value = 'label',
+                                scale = 0.4,
+                                colour = G.C.WHITE,
+                                shadow = true,
+                            },
                         },
-                    }, },
+                    },
                 },
                 {
                     n = G.UIT.R,
@@ -765,8 +853,8 @@ return function(mod)
                 nodes = {
                     {
                         n = G.UIT.C,
-                        config = {align = 'cm', minw = 1.4},
-                        nodes = {reroll_node},
+                        config = {align = 'cm', minw = 1.4, padding = 0},
+                        nodes = {flame_node(), reroll_node},
                     },
                     {
                         n = G.UIT.B,
@@ -777,8 +865,8 @@ return function(mod)
                     },
                     {
                         n = G.UIT.C,
-                        config = {align = 'cm', minw = 1.4},
-                        nodes = {render_die_button()},
+                        config = {align = 'cm', minw = 1.4, padding = 0},
+                        nodes = {flame_node(), render_die_button()},
                     },
                 },
             }
