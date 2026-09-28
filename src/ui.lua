@@ -602,7 +602,7 @@ return function(mod)
                                                 minh = 0.7,
                                                 max_length = 6,
                                                 text_scale = 0.5,
-                                                extended_corpus = false,
+                                                extended_corpus = true,
                                                 all_caps = false,
                                                 prompt_text = '0',
                                                 callback = function()
