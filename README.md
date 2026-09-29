@@ -20,6 +20,8 @@ During each automatic search, flames begin small at the 10th reroll and grow to 
 
 Selections are saved in the mod configuration. Use **CLEAR** in the target picker to remove them.
 
+**See all** and the category sidebar list Jokers first, then consumable types alphabetically, then other card types alphabetically. Within each type, base-game cards come first, followed by bundles alphabetically (or mod names for mods without bundles). Each group sorts by rarity, then displayed card name. Standard rarities run Common → Uncommon → Rare → Legendary; custom rarities follow Steamodded's registration order. Taking ownership of a base-game card does not move it into a mod group.
+
 ## Rules
 
 - The mod does not spawn cards or rewrite vanilla card pools.
@@ -28,6 +30,7 @@ Selections are saved in the mod configuration. Use **CLEAR** in the target picke
 - A paid reroll is never started if it would reduce your money below **KEEP MONEY**.
 - If a selected target is already in the shop, the picker closes without rolling.
 - The target list only enables cards that are visible, selectable, and currently eligible for the `G.shop_jokers` generation path. It uses Steamodded's normal shop pools plus Cryptid's scheduled-shop and Equilibrium sources when they are active. Ineligible cards remain visible but greyed out.
+- Collection visibility respects both boolean and function-valued `no_collection` flags, including Bundles of Fun's bundle toggles. Its Joker bundles appear under **Jokers**, not as separate card types; normal shop eligibility still applies.
 - The default reserve is 5% of your current money the first time the picker opens. You can set it to any whole-dollar value, including `0`.
 
 ## Debug menu

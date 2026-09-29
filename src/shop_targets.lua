@@ -15,7 +15,8 @@ return function(mod)
     local function center_is_visible(center)
         return center
             and not center.hidden
-            and not center.no_collection
+            and (not center.no_collection
+                or (type(center.no_collection) == 'function' and not center.no_collection()))
             and not center.omit
             and center.unlocked ~= false
     end

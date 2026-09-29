@@ -32,7 +32,8 @@ return function(mod)
             set = center.set or pool_name,
             searchable = is_shop_card_center(center)
                 and not center.omit
-                and not center.no_collection
+                and (not center.no_collection
+                    or (type(center.no_collection) == 'function' and not center.no_collection()))
                 and not (mod.blacklist and mod.blacklist.contains(center)),
             center = center,
         }
@@ -65,17 +66,47 @@ return function(mod)
         end
     end
 
-    -- Stable ordering keeps saved selections and pagination predictable.
+    -- Type, origin/bundle, rarity, then name; compute keys once per refresh.
     local function sort_entries(entries)
-        table.sort(entries, function(a, b)
-            local name_a = normalized(entry_name(a))
-            local name_b = normalized(entry_name(b))
-
-            if name_a == name_b then
-                return a.key < b.key
+        local rarity_order = {Common = 1, Uncommon = 2, Rare = 3, Legendary = 4}
+        local next_rarity = 4
+        for _, key in ipairs((SMODS and SMODS.Rarity and SMODS.Rarity.obj_buffer) or {}) do
+            if not rarity_order[key] then
+                next_rarity = next_rarity + 1
+                rarity_order[key] = next_rarity
             end
+        end
 
-            return name_a < name_b
+        for _, entry in ipairs(entries) do
+            local center = entry.center or entry.front
+            local card_type = entry.set or entry.pool
+            local type_order = card_type == 'Joker' and 1
+                or (center.consumeable and 2 or 3)
+            local type_name = card_type == 'Playing Card' and 'Cards' or card_type
+            -- Taking ownership does not turn a base-game card into mod content.
+            local owner = center.original_mod or (not center.taken_ownership and center.mod)
+            local bundle = type(center.bundle) == 'table' and center.bundle[1] or center.bundle
+            local source = owner and (bundle or owner.display_name or owner.name or owner.id) or ''
+            local rarity = center.rarity
+            local rarity_rank = type(rarity) == 'number' and rarity
+                or rarity_order[rarity] or (rarity == nil and 0 or math.huge)
+            local descriptions = G.localization and G.localization.descriptions
+            local text = descriptions and descriptions[card_type] and descriptions[card_type][entry.key]
+            local name = text and type(text.name) == 'string' and text.name or entry_name(entry)
+            entry.sort_key = {
+                type_order, normalized(type_name), owner and 1 or 0, normalized(source),
+                rarity_rank, rarity_rank == math.huge and normalized(rarity) or '',
+                normalized(name), entry.key, entry.kind,
+            }
+        end
+
+        table.sort(entries, function(a, b)
+            for i = 1, #a.sort_key do
+                if a.sort_key[i] ~= b.sort_key[i] then
+                    return a.sort_key[i] < b.sort_key[i]
+                end
+            end
+            return false
         end)
     end
 
@@ -129,7 +160,7 @@ return function(mod)
 
         return matches
     end
-    -- Derive the sidebar categories from entries the player can actually select.
+    -- First appearances in the sorted catalog give the sidebar See All's order.
     function index.center_types()
         local types = {}
         local seen = {}
@@ -146,10 +177,6 @@ return function(mod)
                 end
             end
         end
-
-        table.sort(types, function(a, b)
-            return normalized(a) < normalized(b)
-        end)
 
         return types
     end
