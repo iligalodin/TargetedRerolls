@@ -11,6 +11,14 @@ return function(mod)
     local function entry_name(entry)
         return entry.name or entry.key
     end
+
+    local function display_name(entry)
+        local descriptions = G.localization and G.localization.descriptions
+        local names = descriptions and descriptions[entry.set or entry.pool]
+        local text = names and names[entry.key]
+        return text and type(text.name) == 'string' and text.name or entry_name(entry)
+    end
+
     -- Only Joker and consumable centers can appear in the normal shop catalog.
     local function is_shop_card_center(center)
         return center.set == 'Joker' or center.consumeable
@@ -90,9 +98,7 @@ return function(mod)
             local rarity = center.rarity
             local rarity_rank = type(rarity) == 'number' and rarity
                 or rarity_order[rarity] or (rarity == nil and 0 or math.huge)
-            local descriptions = G.localization and G.localization.descriptions
-            local text = descriptions and descriptions[card_type] and descriptions[card_type][entry.key]
-            local name = text and type(text.name) == 'string' and text.name or entry_name(entry)
+            local name = display_name(entry)
             entry.sort_key = {
                 type_order, normalized(type_name), owner and 1 or 0, normalized(source),
                 rarity_rank, rarity_rank == math.huge and normalized(rarity) or '',
@@ -127,7 +133,7 @@ return function(mod)
         return index.entries or index.refresh()
     end
 
-    -- Search names, keys, pools, and sets without interpreting pattern syntax.
+    -- Search display/internal names, keys, pools, and sets as literal text.
     function index.search(query, pool)
         query = normalized(query)
         local matches = {}
@@ -147,6 +153,7 @@ return function(mod)
             if in_pool and entry.searchable then
                 local haystack = table.concat({
                     normalized(entry_name(entry)),
+                    normalized(display_name(entry)),
                     normalized(entry.key),
                     normalized(entry.pool),
                     normalized(entry.set),

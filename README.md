@@ -9,7 +9,7 @@ Install [Steamodded](https://github.com/Steamodded/smods) and Lovely, then place
 ## Use
 
 1. Enter a shop and click **TARGETED REROLL** beside the normal reroll button.
-2. Search by name or key, or choose a category in the left sidebar.
+2. Search by displayed name, internal name, or key, or choose a category in the left sidebar.
 3. Click cards to select them. A blue outline marks a selected card. Grey cards cannot be selected.
 4. Set **KEEP MONEY** to the minimum dollar amount you want to retain.
 5. Click **ROLL**.

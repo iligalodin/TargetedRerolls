@@ -56,6 +56,12 @@ assert(table.concat(mod.search_index.center_types(), ',') == 'Joker,Fish,Planet,
 assert(keys(mod.search_index.search('rare', 'Joker')) == 'j_rare,j_food_rare',
     'Filtering must preserve origin precedence over name and rarity')
 
+assert(keys(mod.search_index.search('AARDVARK', 'Joker')) == 'j_localized',
+    'Search must find a card by its localized display name, case-insensitively')
+assert(keys(mod.search_index.search('Internal ZZZ', 'Joker')) == 'j_localized'
+    and keys(mod.search_index.search('j_localized', 'Joker')) == 'j_localized',
+    'Localized display names must not replace internal-name or key search')
+
 -- Equal display names must remain stable across registry rebuilds.
 card('j_tie_b', 'Tie', 1)
 card('j_tie_a', 'Tie', 1)
