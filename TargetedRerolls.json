@@ -9,7 +9,7 @@
   "main_file": "TargetedRerolls.lua",
   "icon_path": "icon.png",
   "priority": 0,
-  "version": "26.10.2",
+  "version": "26.10.4",
   "dependencies": [
     "Lovely (>=0.9)",
     "Steamodded"
