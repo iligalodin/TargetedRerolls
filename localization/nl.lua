@@ -29,9 +29,6 @@ return {
             tagr_search = "Zoeken",
             tagr_close = "Sluiten",
             tagr_roll = "Rollen",
-            tagr_debug_set_money = "Zet geld",
-            tagr_debug_set_9m = "Zet geld op $9.000.000",
-            tagr_debug_reset_reroll = "Zet rerollkosten op $1",
             tagr_debug_open = "Open debugmenu",
             tagr_debug_title = "Debugmenu",
             tagr_debug_desc = "Vul een heel dollar nummer in."

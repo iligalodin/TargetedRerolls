@@ -35,9 +35,7 @@ Selections are saved in the mod configuration. Use **CLEAR** in the target picke
 
 ## Debug menu
 
-Open Targeted Rerolls in Steamodded's mod settings and choose **OPEN DEBUG MENU** while a run is active.
 
-The menu can set money to `$9,000,000` and reset the current reroll cost to `$1`. It is intended for testing, not normal play.
 
 ## For mod authors
 

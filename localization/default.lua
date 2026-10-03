@@ -29,9 +29,6 @@ return {
             tagr_search = "Search",
             tagr_close = "Close",
             tagr_roll = "Roll",
-            tagr_debug_set_money = "Set Money",
-            tagr_debug_set_9m = "Set money to $9,000,000",
-            tagr_debug_reset_reroll = "Reset reroll cost to $1",
             tagr_debug_open = "Open debug menu",
             tagr_debug_title = "Debug menu",
             tagr_debug_desc = "Enter a whole-dollar amount."
